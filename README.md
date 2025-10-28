@@ -1,6 +1,6 @@
 # Nexus AI Agents
 
-Nexus AI Agents-A central hub for answering  queries related to business finance data , banking, sales, company's info and other general finance related questions.
+Nexus AI Agents-A central hub for answering  queries related to business finance data , banking, sales, company's info and other general finance related info.
 
 ## Project Structure
 
