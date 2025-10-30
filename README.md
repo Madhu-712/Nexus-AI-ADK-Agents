@@ -43,22 +43,6 @@ Nexus AI Agents-A central hub for answering  queries related to business finance
     ├── sales_custom_function.py
     └── thirdpartytool.py
 ```
-
-## Execution Steps
-
-To run this project, you need to have Docker installed.
-
-1.  **Build the Docker image:**
-    ```bash
-    docker build -t nexus-ai-agents .
-    ```
-
-2.  **Run the Docker container:**
-    ```bash
-    docker run -p 8080:8080 -e API_NINJAS_KEY="YOUR_API_KEY" nexus-ai-agents
-    ```
-    *Replace `YOUR_API_KEY` with your actual API key from API-Ninjas.*
-
 ## Agent Descriptions
 
 ### NexusAI-BankAgent
