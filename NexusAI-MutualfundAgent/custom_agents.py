@@ -8,6 +8,6 @@ from google.adk.agents.llm_agent import Agent
 google_search_agent = Agent(
     model='gemini-2.5-flash',
     name='googlewiki_search_agent',
-    instruction='A helpful assistant for user questions related to finance and general company information.',
+    instruction='A helpful assistant for user questions related to finance and mutualfunds.',
     tools=[google_search],
 )
