@@ -22,7 +22,7 @@ from .sales_custom_function import get_commodityprice,get_VATinfo,get_SalesTAXin
 
 load_dotenv()
 
-# Specialist Agent 2
+# Specialist Agent 1
 
 BankAgent=LlmAgent(
     name="BankAgent",
@@ -39,7 +39,7 @@ BankAgent=LlmAgent(
     output_key="bank_result"
 )
 
-#Specialist Agent 3
+#Specialist Agent 2
 CompanyinfoAgent=LlmAgent(
     name="CompanyinfoAgent",
     model="gemini-2.5-flash",
@@ -57,7 +57,7 @@ CompanyinfoAgent=LlmAgent(
 
 )
 
-# Specialist Agent 4
+# Specialist Agent 3
 
 SalesAgent=LlmAgent(
     name="SalesAgent",
@@ -73,7 +73,7 @@ SalesAgent=LlmAgent(
     output_key="sales_result"
 )
 
-# Specialist Agent 1
+# Specialist Agent 4
 FinanceAgent=LlmAgent(
     name="FinanceAgent",
     model="gemini-2.5-flash",
@@ -83,33 +83,46 @@ FinanceAgent=LlmAgent(
          FunctionTool(stockprice),
          FunctionTool(mutualfundinfo),
          FunctionTool(exchangerateinfo),
-         
          LangchainTool(langchain_wikipedia_tool),
          AgentTool(agent=google_search_agent),
         ],
     instruction="You are specialist Finance agent who can give info about mortgage,stock exchange,stock price,exchange rate and mutual fund advice  to investors",
     output_key="finance_result"
 )
-
+#Specialist Agent 5
+MutualfundAgent=LlmAgent(
+    name="MutualfundAgent",
+    model="gemini-2.5-flash",
+    tools=[
+         FunctionTool( mutualfund_by_ticker),
+         FunctionTool(mutualfund_by_type),
+         FunctionTool(mutualfund_by_name),
+         LangchainTool(langchain_wikipedia_tool),
+         AgentTool(agent=google_search_agent),
+        ],
+    instruction="You are specialist mutualfund agent who can give info about  mutual fund advice  to investors by type, by name and by ticker",
+    output_key="mutualfund_result"
+)
 
 
 
 # ✨ The ParallelAgent runs all three specialists at once ✨
 parallel_research_agent=ParallelAgent(
     name="parallel_research_agent",
-    sub_agents=[CompanyinfoAgent,SalesAgent,FinanceAgent,BankAgent],
+    sub_agents=[CompanyinfoAgent,SalesAgent,FinanceAgent,BankAgent,MutualfundAgent],
 
 )
 
 # Agent to synthesize the parallel results
 synthesis_agent=LlmAgent(
     name="synthesis_agent", model="gemini-2.5-flash",
-    input_keys=["companyinfo_result", "finance_result", "bank_result", "sales_result"],
+    input_keys=["companyinfo_result", "finance_result", "bank_result", "sales_result","mutualfund_result"],
     instruction="""You are a helpful assistant. Combine the following research results into a clear, bulleted list for the user.
     - Companyinfo: {companyinfo_result}
     - Finance: {finance_result}
     - Bank: {bank_result}
-    - Sales: {sales_result}"""
+    - Sales: {sales_result}
+    - Mutualfund : {mutualfund_result} """
 
 )
 
@@ -120,14 +133,6 @@ sequential_pipeline_agent=SequentialAgent(
     sub_agents=[parallel_research_agent, synthesis_agent],
     description="A workflow that finds multiple things in parallel and then summarizes the results."
 )
-
-
-
-
-
-
-
-
 
 
 root_agent = Agent(
@@ -142,3 +147,5 @@ root_agent = Agent(
          AgentTool(agent=google_search_agent),
         ]
 )
+
+root_agent = sequential_pipeline_agent
