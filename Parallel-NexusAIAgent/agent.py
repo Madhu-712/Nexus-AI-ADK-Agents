@@ -138,14 +138,8 @@ sequential_pipeline_agent=SequentialAgent(
 root_agent = Agent(
    model='gemini-2.5-flash',
    name='sequential_pipeline_agent',
-   description='A helpful assistant for user questions.Act as a Agent team supercharged with a ParallelAgent workflow!',
-      tools=[
-         FunctionTool(get_SalesTAXinfo), 
-         FunctionTool(get_VATinfo),
-         FunctionTool(get_commodityprice),
-         LangchainTool(langchain_wikipedia_tool),
-         AgentTool(agent=google_search_agent),
-        ]
+   description='A helpful assistant for user questions.Act as a Agent team supercharged with a ParallelAgent workflow!'
+      
 )
 
 root_agent = sequential_pipeline_agent
